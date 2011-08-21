@@ -1,0 +1,37 @@
+# English strings go here for Rails i18n
+en:
+   menu_customer_matrix: Customer Matrix
+   label_customer_matrix: Customer Matrix
+   project_module_customer_matrix: Customer Matrix plugin
+
+   label_customer_matrix: Customer's businesses matrix
+   label_customer_new: New customer
+   label_customer: Customer
+   label_business_new: New business
+   label_business: Business
+   label_bind_projects: Bind projects
+   label_project_binding: Binding
+   label_actual_cost_update: Update Actual cost
+   label_user_cost_update: Update workers' costs
+   label_default_user_cost: Default cost
+
+   field_order_placed_cost: Order placed cost
+   field_target_cost: Target cost
+   field_actual_cost: Actual cost
+   field_actual_time: Actual time
+   field_achievement_rate: Achievement rate
+   field_user_cost_by_hour: Cost by one hour
+   field_user_cost_by_month: Cost by one month
+
+   error_costs_update: Failed in updating workers' costs
+   error_actual_cost_update: Failed in updating actual costs
+
+   business_status_approached: Approached
+   business_status_estimation: Apply estimation
+   business_status_accepting: Accept the order
+   business_status_failure: Failure to accept the order
+   business_status_developing: Developing product
+   business_status_delivered: Delivered product
+   business_status_closed: Closed business
+
+   default_user_cost_by_month: 6000

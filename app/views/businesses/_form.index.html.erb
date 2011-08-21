@@ -1,0 +1,8 @@
+<%= error_messages_for 'business' %>
+<div class="box">
+  <p><%= form.text_field :name, :size => 100, :required => true %></p>
+  <p><%= form.select :status, Business.statuses, :status => :business_status_approached %></p>
+  <p><%= form.text_field :order_placed_cost, :size => 100, :required => true %></p>
+  <p><%= form.text_field :target_cost, :size => 100, :required => true %></p>
+  <p><%= form.text_area :description %></p>
+</div>

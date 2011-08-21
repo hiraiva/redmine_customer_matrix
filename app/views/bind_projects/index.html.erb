@@ -1,0 +1,36 @@
+<div class="contextual">
+  <%= link_to(l(:button_back), {:controller => 'businesses'}, :class => 'icon icon-move') %>
+</div>
+
+<h2><%=h l(:label_bind_projects) + ' :: ' + @business.name %></h2>
+
+<% if (@projects.blank?) %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% else %>
+  <% form_tag(:action => 'index') do -%>
+
+  <table class="list" style="width: 750px;">
+
+    <thead>
+      <tr>  
+        <th><%=h l(:label_project) %></th>
+        <th style="width: 20%;"><%=h l(:label_project_binding) %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+    <% @projects.each do |project| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td><%=h project.name %></td>
+        <td style="text-align: center;"><%= check_box_tag 'binding[' + project.id.to_s + ']', 'binded', (!@bindeds[project.id].blank?) %></td>
+      </tr>
+    <% end %>
+    </tbody>
+
+  </table>
+
+    <%= submit_tag l(:button_change) %>
+  
+  <% end %>
+
+<% end %>

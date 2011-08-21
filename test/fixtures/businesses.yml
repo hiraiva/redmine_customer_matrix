@@ -1,0 +1,31 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  id: 1
+
+  customer_id: 1
+
+  order_placed_cost: 1
+
+  target_cost: 1
+
+  actual_cost: 1
+
+  status: MyString
+
+  description: MyText
+
+two:
+  id: 2
+
+  customer_id: 1
+
+  order_placed_cost: 1
+
+  target_cost: 1
+
+  actual_cost: 1
+
+  status: MyString
+
+  description: MyText
+

@@ -1,0 +1,10 @@
+<div class="contextual">
+  <%= link_to(l(:button_back), {:controller => 'businesses'}, :class => 'icon icon-move') %>
+</div>
+
+<h2><%=h l(:label_business) + ' :: ' + @business.name %></h2>
+
+<% labelled_tabular_form_for :business, @business, :url => {:id => @business.id, :customer_id => @customer_id} do |data| %>
+  <%= render :partial => 'businesses/form', :locals => {:form => data} %>
+  <%= data.submit l(:button_edit) %>
+<% end %>

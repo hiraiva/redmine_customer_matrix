@@ -1,0 +1,38 @@
+# English strings go here for Rails i18n
+ja:
+   menu_customer_matrix: 顧客マトリックス
+   label_customer_matrix: 顧客マトリックス
+   project_module_customer_matrix: 顧客マトリックスプラグイン
+
+   label_customer_matrix: 顧客案件マトリックス
+   label_customer_new: 新しい顧客
+   label_customer: 顧客
+   label_business_new: 新しい案件
+   label_business: 案件
+   label_bind_projects: プロジェクトを紐付ける
+   label_project_binding: 紐付ける
+   label_actual_cost_update: 現状コストを更新する
+   label_user_cost_update: 作業員単価を更新する
+   label_default_user_cost: デフォルト単価
+
+   field_order_placed_cost: 受注額
+   field_target_cost: 目標コスト
+   field_actual_cost: 現状コスト
+   field_actual_time: 現状工数
+   field_achievement_rate: 達成率
+   field_user_cost_by_hour: １時間あたり単価
+   field_user_cost_by_month: 人月単価
+
+   error_costs_update: 作業員単価更新に失敗しました
+   error_actual_cost_update: 現状コスト更新に失敗しました
+
+   business_status_approached: 引き合い
+   business_status_estimation: 見積もり提出
+   business_status_accepted: 受注
+   business_status_failure: 失注
+   business_status_developing: 開発中
+   business_status_delivered: 納品済み
+   business_status_closed: 完了
+
+   default_user_cost_by_month: 700000
+

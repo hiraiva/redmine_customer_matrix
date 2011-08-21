@@ -1,0 +1,162 @@
+<% col_pix = 200 %>
+<% inner_col_pix = 200 %>
+<style style="text/css">
+  .matrix_item{
+    font-size: 130%;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px #b0b0f0;  
+  }
+  .matrix th, matrix_table th, .matrix_table td{
+    font-size: 110%;
+    font-weight: normal;
+  }
+  
+  .matrix{
+    border: 1px outset #9090f0;
+    box-shadow: 1px 1px 4px #9090f0;
+    -moz-box-shadow: 1px 1px 4px #9090f0;
+    -webkit-box-shadow: 1px 1px 4px #9090f0;
+  }
+  .matrix thead th{
+    background-color: #e0e0e0;
+  }
+
+  .matrix_table{
+    box-shadow: 0px 0px 2px #b0b0f0;
+    -moz-box-shadow: 0px 0px 2px #b0b0f0;
+    -webkit-box-shadow: 0px 0px 2px #b0b0f0;
+  }
+  .matrix_table th, .matrix_table td{
+    border-bottom: 1px dashed #b9b9b9;
+  }
+  .matrix .left{text-align: left;}
+  .matrix .right{text-align: right;}
+  .matrix .center{text-align: center;}
+</style>
+<script type="text/javascript">
+  var _container = {
+    showDescription: function(element){
+      var id = element.id.replace(/^handler/, "descripion")
+      $(id).show();
+    },
+    hideDescription: function(element){
+       var id = element.id.replace(/^handler/, "descripion")
+      $(id).hide();
+    }
+  }
+</script>
+
+<div class="contextual">
+  <%= link_to(l(:label_actual_cost_update), {:controller => 'businesses', :action => 'actual_cost_update'}, :class => 'icon icon-reload') %>
+  <%= link_to(l(:label_user_cost_update), {:controller => 'user_costs', :action => 'index'}, :class => 'icon icon-user') %>
+  <%= link_to(l(:label_customer_new), {:controller => 'customers', :action => 'new'}, :class => 'icon icon-add') %>
+</div>
+
+<h2><%=h l(:label_customer_matrix) %></h2>
+
+<% if (@customers.blank?) %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% else %>
+  <table class="matrix">
+    <thead>
+      <tr>  
+        <th style="width: <%= col_pix %>px"><%=h l(:label_customer) %></th>
+        <th style="width: <%= col_pix * (@maxBusinesses + 1) %>px"<% if @maxBusinesses > 0 %> colspan="<%= @maxBusinesses + 1 %>"<% end %>></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @customers.each do |customer| %>
+
+      <tr class="<%= cycle('odd', 'even') %>">
+
+        <th style="width: <%= col_pix %>px">
+          <%= link_to(customer.name, {:controller => 'customers', :action=> :edit, :id => customer.id}, :class => 'matrix_item' ) %>
+          <br /><%= link_to(l(:label_business_new), {:action => 'new', :customer_id => customer.id}, :class => 'icon icon-add') %>
+        </th>
+
+        <td style="width: <%= col_pix * (@maxBusinesses + 1) %>px">
+        <% if customer.businesses.blank? %>
+
+          <p class="nodata"><%= l(:label_no_data) %></p>
+
+        <% else %>
+
+          <table class="matrix_table">
+            <thead>
+              <tr>
+                <th style="width: <%= inner_col_pix %>px"><%=h l(:label_business) %></th>
+                <% customer.businesses.each do |business| %>
+                  <td style="width: <%= inner_col_pix %>px" class="center">
+                    <%= link_to(business.name, {:action=> :edit, :id => business.id, :customer_id => customer.id}, :class => 'matrix_item' ) %>
+                    <br /><%= link_to(l(:label_bind_projects), {:controller => 'bind_projects', :id => business.id}, :class => 'icon icon-projects') %>
+                  </td>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th><%=h l(:field_status) %></th>
+                <% customer.businesses.each do |business| %>
+                  <td class="center"><%=h Business.status_to_label business.status %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th><%=h l(:field_order_placed_cost) %></th>
+                <% customer.businesses.each do |business| %>
+                  <td class="right"><%=h number_to_currency(business.order_placed_cost) %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th><%=h l(:field_target_cost) %></th>
+                <% customer.businesses.each do |business| %>
+                  <td class="right"><%=h number_to_currency(business.target_cost) %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th><%=h l(:field_actual_cost) %><br />(<%=h l(:field_actual_time) %>)</th>
+                <% customer.businesses.each do |business| %>
+                  <td class="right">
+                    <%=h number_to_currency(business.actual_cost) %>
+                    <br />(<%=h l(:label_f_hour_plural, :value => business.actual_hours) %>)</td>
+                <% end %>
+              </tr>
+              <tr>
+                <th><%=h l(:field_achievement_rate) %></th>
+                <% customer.businesses.each do |business| %>
+                  <%
+                    target_cost = business.target_cost.nil? ? 0 : business.target_cost
+                    cost = business.actual_cost.nil? ? 0 : business.actual_cost
+                    per = (target_cost > 0) ? target_cost.quo(cost).to_f * 100.to_f : 0
+                    per = per.round(2) if per.is_a?(Float)
+                  %>
+                  <td class="right"><%=h per %>&#37;</td>
+                <% end %>
+              </tr>
+              <tr>
+                <th><%=h l(:field_description) %></th>
+                <% customer.businesses.each do |business| %>
+                  <td><%=h business.description %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th><%=h l(:field_updated_on) %><br />(<%=h l(:field_created_on) %>)</th>
+                <% customer.businesses.each do |business| %>
+                  <td>
+                    <%=h format_date(business.created_at) %>
+                    <br />(<%=h format_date(business.updated_at) %>)
+                  </td>
+                <% end %>
+              </tr>
+            </tbody>
+          </table>
+
+        <% end %>
+
+        </td>
+
+      </tr>
+
+    <% end %>
+    </tbody>
+  </table>
+<% end %>

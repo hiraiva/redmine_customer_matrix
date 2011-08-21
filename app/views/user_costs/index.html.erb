@@ -1,0 +1,88 @@
+<script type="text/javascript">
+  var _container = {
+    workingDays: <%=h UserCostByHour::working_days %>,
+    workingHours: <%=h UserCostByHour::working_hours %>,
+    cleanValue: function (value) {
+      if (value != '0') {
+        value = value.replace(/(^0+|[^0-9])/, '');
+      }
+      return value;
+    },
+    monthToHour: function (element){
+      var target = $(element.id.replace(/cost_by_month$/, 'cost_by_hour'))
+      if (element.value.match(/[0-9]/)) {
+        element.value = _container.cleanValue(element.value);
+        target.value = Math.round(element.value / _container.workingHours / _container.workingDays)
+      } else {
+        element.value = '';
+        target.value = '';
+      }
+    },
+    hourToMonth: function(element){
+      var target = $(element.id.replace(/cost_by_hour$/, 'cost_by_month'));
+      if (element.value.match(/[0-9]/)) {
+        element.value = _container.cleanValue(element.value);
+        target.value = element.value * _container.workingHours * _container.workingDays
+      } else {
+        element.value = '';
+        target.value = '';
+      }
+    }
+  }
+</script>
+<div class="contextual">
+  <%= link_to(l(:button_back), {:controller => 'businesses'}, :class => 'icon icon-move') %>
+</div>
+
+<h2><%=h l(:label_user_cost_update) %></h2>
+
+<% if (@users.blank?) %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% else %>
+  <% form_tag(:action => 'index') do -%>
+
+  <table class="list" style="width: 750px;">
+
+    <thead>
+      <tr>  
+        <th><%=h l(:label_user) %></th>
+        <th style="width: 20%;"><%=h l(:field_user_cost_by_month) %></th>
+        <th style="width: 20%;"><%=h l(:field_user_cost_by_hour) %></th>
+        <th style="width: 20%;"><%=h l(:field_updated_on) %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td><%=h l(:label_default_user_cost) %></td>
+        <td>
+          <%= text_field_tag 'costs[' + UserCostByHour::default_id.to_s + '][cost_by_month]', @costs[UserCostByHour::default_id].cost_by_month, :size => 16, :required => true, :onchange => '_container.monthToHour(this)' %>
+        </td>
+        <td>
+          <%= text_field_tag 'costs[' + UserCostByHour::default_id.to_s + '][cost_by_hour]', @costs[UserCostByHour::default_id].cost_by_hour, :size => 16, :required => true, :onchange => '_container.hourToMonth(this)' %>
+          <%= hidden_field_tag 'costs[' + UserCostByHour::default_id.to_s + '][user_id]', UserCostByHour::default_id %>
+        </td>
+        <td><%=h format_date(@costs[UserCostByHour::default_id].updated_at) %></td>
+      </tr>
+    <% @users.each do |user| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td><%=h user.name %></td>
+        <td>
+          <%= text_field_tag 'costs[' + user.id.to_s + '][cost_by_month]', @costs[user.id].cost_by_month, :size => 16, :onchange => '_container.monthToHour(this)' %>
+        </td>
+        <td>
+          <%= text_field_tag 'costs[' + user.id.to_s + '][cost_by_hour]', @costs[user.id].cost_by_hour, :size => 16, :onchange => '_container.hourToMonth(this)' %>
+          <%= hidden_field_tag 'costs[' + user.id.to_s + '][user_id]', user.id %>
+        </td>
+        <td><%=h format_date(@costs[user.id].updated_at) %></td>
+      </tr>
+    <% end %>
+    </tbody>
+
+  </table>
+
+    <%= submit_tag l(:button_change) %>
+  
+  <% end %>
+
+<% end %>
